@@ -3,10 +3,12 @@
 Python library for viewing and extracting kernel extensions from a given iOS
 kernel cache.
 
-In order to install the library use:
+
+In order to install the library you should first install `lief` with python
+bindings and then use:
 
 ```bash
-$ ./setup.py install
+$ sudo ./setup.py install
 ```
 
 After installing the library you can use `kextractor` script.
