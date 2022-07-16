@@ -57,7 +57,7 @@ argument followed by the name of the targeted extension:
 	$ kextractor -K <name_of_extension> KCACHE
 ```
 
-Kextractor also has a decompression script for kernel cache from iOS 14 onwards. For that, use the `decompress` script from `kextractorlib`. Before using the script, you will need to create a file with the extension `mach.arm` which will be used to store the result. The script requires 2 offsets which can be found by using the `get_bvx_section_offsets` script from `kextractorlib`. Note that the decompression script doesn't need any arguments, while the `get_bvx_section_offsets` script needs the path to the compressed kernel cache file.
+Kextractor also has a decompression script for kernel cache from iOS 14 onwards. For that, use the `decompress` script from `kextractorlib`. Before using the script, you will need to create a file with the extension `mach.arm` which will be used to store the result and you need to install `pyliblzfse`(https://github.com/ydkhatri/pyliblzfse). The script requires 2 offsets which can be found by using the `get_bvx_section_offsets` script from `kextractorlib`. Note that the decompression script doesn't need any arguments, while the `get_bvx_section_offsets` script needs the path to the compressed kernel cache file.
 ## Supported iOS versions
 
 Kextractor is currently working for every iOS version up to iOS 12.
