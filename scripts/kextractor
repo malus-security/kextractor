@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+
+import sys
+import argparse
+from kextractorlib import *
+from kextractorlib.decompress import decompress_func
+
+def get_kext_by_name(kexts, kext_name):
+    """Returns the kernel extension whose name is kest_name
+    """
+    for kext in kexts:
+        if kext.get_id() == kext_name:
+            return kext
+    for kext in kexts:
+        if kext.get_name() == kext_name:
+            return kext
+    return None
+
+
+def filter_kexts_by_name(kexts: list, kext_names: list):
+    """Returns an array of kernel extensions which have the name inside the
+    kext_names list. if 'ALL' is in list, all the kernel extensions will be
+    returned.
+    """
+    if kext_names == None:
+        return []
+    if 'ALL' in kext_names:
+        return kexts
+    rkexts = set()
+    for kext_name in kext_names:
+        kext = get_kext_by_name(kexts, kext_name)
+        if kext == None:
+            print('There is no such kernel extension: {}'.format(kext_name),
+                file=sys.stderr)
+            return None
+        rkexts.add(kext)
+    return list(rkexts)
+
+def main(args):
+    decompressed_file = decompress_func(args.kcache_path)
+    kexts = get_kernel_extensions(decompressed_file)
+    if args.show_kexts:
+        for nth, kext in enumerate(kexts, 1):
+            print(nth, kext)
+
+    retcode = 0
+    extract_kexts = filter_kexts_by_name(kexts, args.extract_kexts)
+    if extract_kexts == None:
+        retcode = -1
+        extract_kexts = []
+
+    for kext in extract_kexts:
+        kext_id = kext.get_id()
+        kext_content = kext.get_content()
+        try:
+            with open(args.outdir + '/' + kext_id + '.kext', 'wb') as f:
+                f.write(kext_content)
+                extractor.put_remain_sections(decompressed_file, f, kext_content)
+        except IOError as e:
+            retcode = e.errno
+            print(e, file=sys.stderr)
+    return retcode
+
+
+if __name__ == '__main__':
+    print()
+
+    parser = argparse.ArgumentParser(
+        description='Kernel cache manipulation tool')
+    parser.add_argument('kcache_path', metavar='KCACHE', type=str,
+        help='path to decrypted kernel cache')
+    parser.add_argument('-K','--extract-kext', dest='extract_kexts',
+        metavar='KEXT', action='append',
+        help='extract kernel extension from kernel cache')
+    parser.add_argument('-k','--show-kexts', dest='show_kexts',
+        action='store_const', const=True, default=False,
+        help='show kernel extensions in kernel cache')
+    parser.add_argument('-o','--output-dir', dest='outdir', type=str,
+        default='.', help='store data to given directory')
+
+    args = parser.parse_args()
+    exit(main(args))
