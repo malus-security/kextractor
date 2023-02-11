@@ -4,6 +4,7 @@ import sys
 import argparse
 from kextractorlib import *
 from kextractorlib.decompress import decompress_func
+from kextractorlib.decrypt import decrypt
 
 def get_kext_by_name(kexts, kext_name):
     """Returns the kernel extension whose name is kest_name
@@ -37,6 +38,7 @@ def filter_kexts_by_name(kexts: list, kext_names: list):
     return list(rkexts)
 
 def main(args):
+    decrypt(args.kcache_path)
     decompressed_file = decompress_func(args.kcache_path)
     kexts = get_kernel_extensions(decompressed_file)
     if args.show_kexts:

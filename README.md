@@ -22,7 +22,13 @@ You might get this error:
 
 If that is the case, you need to install `defusedxml` with python bindings.
 
-After installing the library you can use `kextractor` script from the
+You also need to make sure you can run perl scripts and have installed
+`Crypt::Rijndael` perl module. Before runing `kextractor`, please make
+sure you can run `decrypt.pl` by making it an executable and that you
+run the `make` command in the `/kextractor/kextractorlib/lzssdec`
+directory.
+
+After completing these steps you can use `kextractor` script from the
 `/scripts` directory.
 
 ## Usage
@@ -56,7 +62,9 @@ argument followed by the name of the targeted extension:
 ```bash
 	$ kextractor -K <name_of_extension> KCACHE
 ```
-Kextractor also has a decompression feature integrated. For that, you need to provide a path that will be used when generating the decompressed file and you need to install `pyliblzfse`(https://github.com/ydkhatri/pyliblzfse). Please note that for iOS <= 8 the kernel cache file is encrypted and it needs to be decrypted before the extensions can be extracted. 
+Kextractor also has a decompression feature integrated. For that, you need to provide a path that will be used when generating the decompressed file and you need to install `pyliblzfse`(https://github.com/ydkhatri/pyliblzfse). Please note that for iOS <= 8 the kernel cache file is encrypted and it needs to be decrypted before the extensions can be extracted. Kextractor now offers this functionality, and you
+will need to provide the Key and IV for the kernel cache. You can find those here: https://www.theiphonewiki.com/wiki.
+
 ## Supported iOS versions
 
 Kextractor is currently working for every iOS version up to iOS 15.
