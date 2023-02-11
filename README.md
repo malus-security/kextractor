@@ -22,7 +22,13 @@ You might get this error:
 
 If that is the case, you need to install `defusedxml` with python bindings.
 
-After installing the library you can use `kextractor` script from the
+You also need to make sure you can run perl scripts and have installed
+`Crypt::Rijndael` perl module. Before runing `kextractor`, please make
+sure you can run `decrypt.pl` by making it an executable and that you
+run the `make` command in the `/kextractor/kextractorlib/lzssdec`
+directory.
+
+After completing these steps you can use `kextractor` script from the
 `/scripts` directory.
 
 ## Usage
@@ -56,15 +62,10 @@ argument followed by the name of the targeted extension:
 ```bash
 	$ kextractor -K <name_of_extension> KCACHE
 ```
+Kextractor also has a decompression feature integrated. For that, you need to provide a path that will be used when generating the decompressed file and you need to install `pyliblzfse`(https://github.com/ydkhatri/pyliblzfse). Please note that for iOS <= 8 the kernel cache file is encrypted and it needs to be decrypted before the extensions can be extracted. Kextractor now offers this functionality, and you
+will need to provide the Key and IV for the kernel cache. You can find those here: https://www.theiphonewiki.com/wiki.
 
-Kextractor also has a decompression script for kernel cache from iOS 14 onwards. For that, use the `decompress` script from `kextractorlib`. Before using the script, you will need to create a file with the extension `mach.arm` which will be used to store the result and you need to install `pyliblzfse`(https://github.com/ydkhatri/pyliblzfse). The script requires 2 offsets which can be found by using the `get_bvx_section_offsets` script from `kextractorlib`. Note that the decompression script doesn't need any arguments, while the `get_bvx_section_offsets` script needs the path to the compressed kernel cache file.
 ## Supported iOS versions
 
-Kextractor is currently working for every iOS version up to iOS 12.
-For versions starting from iOS 12 Kextractor is only able to extract the text
-section. The format of kernelcaches has changed significantly from this version
-onwards:
-	- Some segments from the extensions have been integrated into the `__TEXT`,`__DATA_CONST`, `__TEXT_EXEC`, `__DATA` and `__LINKEDIT` segments
-	- There are some new sections
-	- Some old segments are now 0 bytes long (`__PRELINK_TEXT`, `__PLK_TEXT_EXEC`, `__PRELINK_DATA` and `__PLK_DATA_CONST`)
-	- There is no symbol information
+Kextractor is currently working for every iOS version up to iOS 15.
+
